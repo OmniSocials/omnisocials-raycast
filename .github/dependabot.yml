@@ -1,12 +1,26 @@
-# To get started with Dependabot version updates, you'll need to specify which
-# package ecosystems to update and where the package manifests are located.
-# Please see the documentation for all configuration options:
-# https://docs.github.com/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
-
+# Version updates for npm only; this repo has no GitHub Actions workflows. npm version updates
+# create too many pull requests, so every update goes into one of two groups: minor and patch
+# updates together, and major updates on their own. npm security fixes still come from
+# Dependabot alerts. Every pull request goes to main and waits 7 days after a release (cooldown),
+# the same rule as min-release-age on the Mac.
 version: 2
 updates:
-  - package-ecosystem: "" # See documentation for possible values
-    directory: "/" # Location of package manifests
+  - package-ecosystem: "npm"
+    directory: "/"
     schedule:
       interval: "weekly"
-      
+    cooldown:
+      default-days: 7
+    open-pull-requests-limit: 2
+    groups:
+      npm-minor-patch:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
+      npm-major:
+        patterns:
+          - "*"
+        update-types:
+          - "major"
